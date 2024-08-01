@@ -30,7 +30,7 @@ func main() {
 	}
 	
 	if len(fileContents) > 0 {
-		panic("Scanner not implemented") // if file has some data, scan it, scanner not implemented yet
+		panic("Scanner not implemented") 
 	} else {
 		fmt.Println("EOF  null") // Placeholder, remove this line when implementing the scanner
 	}
