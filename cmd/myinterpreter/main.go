@@ -21,9 +21,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	filename := os.Args[2] // takes the file name from cli
-	fileContents, err := os.ReadFile(filename) // Reads the file contents into a byte array
-	// if error, print the rror and exit
+	filename := os.Args[2] 
+	fileContents, err := os.ReadFile(filename) 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
 		os.Exit(1)
