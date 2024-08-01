@@ -21,18 +21,17 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Uncomment this block to pass the first stage
-	//
-	// filename := os.Args[2]
-	// fileContents, err := os.ReadFile(filename)
-	// if err != nil {
-	// 	fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
-	// 	os.Exit(1)
-	// }
-	//
-	// if len(fileContents) > 0 {
-	// 	panic("Scanner not implemented")
-	// } else {
-	// 	fmt.Println("EOF  null") // Placeholder, remove this line when implementing the scanner
-	// }
+	filename := os.Args[2] // takes the file name from cli
+	fileContents, err := os.ReadFile(filename) // Reads the file contents into a byte array
+	// if error, print the rror and exit
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
+		os.Exit(1)
+	}
+	
+	if len(fileContents) > 0 {
+		panic("Scanner not implemented") // if file has some data, scan it, scanner not implemented yet
+	} else {
+		fmt.Println("EOF  null") // Placeholder, remove this line when implementing the scanner
+	}
 }
