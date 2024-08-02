@@ -6,8 +6,10 @@ import (
 )
 
 const (
-	LEFT_Paren rune = '('
-	RIGHT_Paren rune = ')'
+	LEFT_PAREN rune = '('
+	RIGHT_PAREN rune = ')'
+	LEFT_BRACE rune = '{'
+	RIGHT_BRACE rune = '}'
 )
 
 func main() {
@@ -37,11 +39,17 @@ func main() {
 
 	for _, char := range fileContentString {
 		switch char {
-		case LEFT_Paren:
+		case LEFT_PAREN:
 			fmt.Println("LEFT_PAREN ( null");
 
-		case RIGHT_Paren:
+		case RIGHT_PAREN:
 			fmt.Println("RIGHT_PAREN ) null");
+
+		case LEFT_BRACE:
+			fmt.Println("LEFT_BRACE { null");
+
+		case RIGHT_BRACE:
+			fmt.Println("LEFT_BRACE { null");
 		}
 	}
 
