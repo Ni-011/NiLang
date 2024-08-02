@@ -7,7 +7,7 @@ import (
 
 const (
 	LEFT_Paren rune = '('
-	Right_Paren rune = ')'
+	RIGHT_Paren rune = ')'
 )
 
 func main() {
@@ -40,10 +40,10 @@ func main() {
 		case LEFT_Paren:
 			fmt.Println("LEFT_PAREN ( null");
 
-		case Right_Paren:
+		case RIGHT_Paren:
 			fmt.Println("RIGHT_PAREN ) null");
 		}
 	}
 
-	fmt.Println("EOF null");
+	fmt.Println("EOF  null");
 }
