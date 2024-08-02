@@ -46,40 +46,38 @@ func main() {
 	fileContentString := string(fileContents)
 
 	line := 1
-	errors := []string{}
-	tokens := []string{}
 
 	for _, char := range fileContentString { // for each char in the file, characterise each token
 		switch char {
 		case LEFT_PAREN:
-			tokens = append(tokens, "LEFT_PAREN ( null")
+			fmt.Println("LEFT_PAREN ( null")
 
 		case RIGHT_PAREN:
-			tokens = append(tokens, "RIGHT_PAREN ) null")
+			fmt.Println("RIGHT_PAREN ) null")
 
 		case LEFT_BRACE:
-			tokens = append(tokens, "LEFT_BRACE { null")
+			fmt.Println("LEFT_BRACE { null")
 
 		case RIGHT_BRACE:
-			tokens = append(tokens, "RIGHT_BRACE } null")
+			fmt.Println("RIGHT_BRACE } null")
 
 		case STAR:
-			tokens = append(tokens, "STAR * null")
+			fmt.Println("STAR * null")
 
 		case DOT:
-			tokens = append(tokens, "DOT . null")
+			fmt.Println("DOT . null")
 
 		case COMMA:
-			tokens = append(tokens, "COMMA , null")
+			fmt.Println("COMMA , null")
 
 		case PLUS:
-			tokens = append(tokens, "PLUS + null")
+			fmt.Println("PLUS + null")
 
 		case MINUS:
-			tokens = append(tokens, "MINUS - null")
+			fmt.Println("MINUS - null")
 
 		case SEMICOLON:
-			tokens = append(tokens, "SEMICOLON ; null")
+			fmt.Println("SEMICOLON ; null")
 
 		case '\n': // for new lines
 			line++
@@ -87,18 +85,9 @@ func main() {
 		default:
 			error = true
 			if !unicode.IsSpace(char) { // if char is not a space
-				errorMsg := fmt.Sprintf("[line %d] Error: Unexpected character: %s", line, string(char))
-				errors = append(errors, errorMsg)
+				fmt.Fprintf(os.Stderr, "[line %d] Error: Unexpected character: %s\n", line, string(char))
 			}
 		}
-	}
-
-	for _, errorMsg := range errors {
-		fmt.Fprintln(os.Stderr, errorMsg)
-	}
-
-	for _, token := range tokens {
-		fmt.Println(token)
 	}
 
 	fmt.Println("EOF  null");
