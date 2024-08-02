@@ -18,6 +18,8 @@ const (
 	SEMICOLON rune = ';'
 )
 
+var error bool = false;
+
 func main() {
 	// You can use print statements as follows for debugging, they'll be visible when running tests.
 	fmt.Fprintln(os.Stderr, "Logs from your program will appear here!")
@@ -77,8 +79,13 @@ func main() {
 
 		default:
 			fmt.Fprintf(os.Stderr, "[Line 1] Error: Unxepected character: %s", string(char));
+			error = true;
 		}
 	}
 
 	fmt.Println("EOF  null");
+
+	if error {
+		os.Exit(65);
+	}
 }
