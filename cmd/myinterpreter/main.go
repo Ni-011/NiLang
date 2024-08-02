@@ -49,7 +49,7 @@ func main() {
 			fmt.Println("LEFT_BRACE { null");
 
 		case RIGHT_BRACE:
-			fmt.Println("RIGHT_BRACE { null");
+			fmt.Println("RIGHT_BRACE } null");
 		}
 	}
 
