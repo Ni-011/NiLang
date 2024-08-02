@@ -3,22 +3,23 @@ package main
 import (
 	"fmt"
 	"os"
+	"unicode"
 )
 
 const (
-	LEFT_PAREN rune = '('
+	LEFT_PAREN  rune = '('
 	RIGHT_PAREN rune = ')'
-	LEFT_BRACE rune = '{'
+	LEFT_BRACE  rune = '{'
 	RIGHT_BRACE rune = '}'
-	STAR rune = '*'
-	DOT rune = '.'
-	COMMA rune = ','
-	PLUS rune = '+'
-	MINUS rune = '-'
-	SEMICOLON rune = ';'
+	STAR        rune = '*'
+	DOT         rune = '.'
+	COMMA       rune = ','
+	PLUS        rune = '+'
+	MINUS       rune = '-'
+	SEMICOLON   rune = ';'
 )
 
-var error bool = false;
+var error bool = false
 
 func main() {
 	// You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -36,61 +37,74 @@ func main() {
 		os.Exit(1)
 	}
 
-	filename := os.Args[2] // second argument is the filename
+	filename := os.Args[2]                     // second argument is the filename
 	fileContents, err := os.ReadFile(filename) // read the file
-	if err != nil { // if there was an error reading the file
+	if err != nil {                            // if there was an error reading the file
 		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
 		os.Exit(1)
 	}
 
-	fileContentString := string(fileContents);	
+	fileContentString := string(fileContents)
 
-	line := 1;
+	line := 1
+	errors := []string{}
+	tokens := []string{}
 
-	for _, char := range fileContentString {
+	for _, char := range fileContentString { // for each char in the file, characterise each token
 		switch char {
 		case LEFT_PAREN:
-			fmt.Println("LEFT_PAREN ( null");
+			tokens = append(tokens, "LEFT_PAREN ( null")
 
 		case RIGHT_PAREN:
-			fmt.Println("RIGHT_PAREN ) null");
+			tokens = append(tokens, "RIGHT_PAREN ) null")
 
 		case LEFT_BRACE:
-			fmt.Println("LEFT_BRACE { null");
+			tokens = append(tokens, "LEFT_BRACE { null")
 
 		case RIGHT_BRACE:
-			fmt.Println("RIGHT_BRACE } null");
+			tokens = append(tokens, "RIGHT_BRACE } null")
 
 		case STAR:
-			fmt.Println("STAR * null");
+			tokens = append(tokens, "STAR * null")
 
 		case DOT:
-			fmt.Println("DOT . null");
+			tokens = append(tokens, "DOT . null")
 
 		case COMMA:
-			fmt.Println("COMMA , null");
+			tokens = append(tokens, "COMMA , null")
 
 		case PLUS:
-			fmt.Println("PLUS + null");
+			tokens = append(tokens, "PLUS + null")
 
 		case MINUS:
-			fmt.Println("MINUS - null");
+			tokens = append(tokens, "MINUS - null")
 
 		case SEMICOLON:
-			fmt.Println("SEMICOLON ; null");
+			tokens = append(tokens, "SEMICOLON ; null")
 
-		case '\n':
-			line++;
+		case '\n': // for new lines
+			line++
 
 		default:
-			fmt.Fprintf(os.Stderr, "[Line %d] Error: Unxepected character: %s", line, string(char));
-			error = true;
+			if !unicode.IsSpace(char) { // if char is not a space
+				errorMsg := fmt.Sprintf(os.Stderr, "[Line %d] Error: Unxepected character: %s", line, string(char))
+				errors = append(errors, errorMsg)
+				error = true
+			}
 		}
 	}
 
-	fmt.Println("EOF  null");
+	for _, errorMsg := range errors {
+		fmt.Fprintln(os.Stderr, errorMsg)
+	}
+
+	for _, token := range tokens {
+		fmt.Println(token)
+	}
+
+	fmt.Println("EOF  null")
 
 	if error {
-		os.Exit(65);
+		os.Exit(65)
 	}
 }
