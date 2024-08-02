@@ -14,21 +14,21 @@ func main() {
 		os.Exit(1)
 	}
 
-	command := os.Args[1]
+	command := os.Args[1] // first argument is the command
 
-	if command != "tokenize" {
+	if command != "tokenize" { // check if the command is tokenize
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", command)
 		os.Exit(1)
 	}
 
-	filename := os.Args[2] 
-	fileContents, err := os.ReadFile(filename) 
-	if err != nil {
+	filename := os.Args[2] // second argument is the filename
+	fileContents, err := os.ReadFile(filename) // read the file
+	if err != nil { // if there was an error reading the file
 		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
 		os.Exit(1)
 	}
 	
-	if len(fileContents) > 0 {
+	if len(fileContents) > 0 { // check if the file is not empty
 		panic("Scanner not implemented") 
 	} else {
 		fmt.Println("EOF  null") // Placeholder, remove this line when implementing the scanner
