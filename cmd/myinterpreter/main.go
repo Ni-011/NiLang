@@ -40,7 +40,6 @@ func main() {
 	filename := os.Args[2]                     // second argument is the filename
 	fileContents, err := os.ReadFile(filename) // read the file
 	if err != nil {                            // if there was an error reading the file
-		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
 		os.Exit(1)
 	}
 
