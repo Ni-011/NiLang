@@ -87,7 +87,7 @@ func main() {
 		default:
 			error = true
 			if !unicode.IsSpace(char) { // if char is not a space
-				errorMsg := fmt.Sprintf("[Line %d] Error: Unxepected character: %s", line, string(char))
+				errorMsg := fmt.Sprintf("[line %d] Error: Unxepected character: %s", line, string(char))
 				errors = append(errors, errorMsg)
 			}
 		}
