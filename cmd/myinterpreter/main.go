@@ -86,10 +86,10 @@ func main() {
 			line++
 
 		default:
+			error = true
 			if !unicode.IsSpace(char) { // if char is not a space
-				errorMsg := fmt.Sprintf("[Line %d] Error: Unxepected character: %s", line, string(char))
+				errorMsg := fmt.Sprintf("[Line %s] Error: Unxepected character: %s", line, string(char))
 				errors = append(errors, errorMsg)
-				error = true
 			}
 		}
 	}
@@ -102,9 +102,11 @@ func main() {
 		fmt.Println(token)
 	}
 
-	fmt.Println("EOF  null")
+	fmt.Println("EOF  null");
 
 	if error {
-		os.Exit(65)
+		os.Exit(65);
+	} else {
+		os.Exit(0);
 	}
 }
