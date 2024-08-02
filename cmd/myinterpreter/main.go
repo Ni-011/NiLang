@@ -76,7 +76,7 @@ func main() {
 			fmt.Println("SEMICOLON ; null");
 
 		default:
-			fmt.Fprintf(os.Stderr, "[Line[1] Error: Unxepected character: %s", char);
+			fmt.Fprintf(os.Stderr, "[Line 1] Error: Unxepected character: %s", string(char));
 		}
 	}
 
