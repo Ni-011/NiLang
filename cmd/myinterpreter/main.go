@@ -45,6 +45,8 @@ func main() {
 
 	fileContentString := string(fileContents);	
 
+	line := 1;
+
 	for _, char := range fileContentString {
 		switch char {
 		case LEFT_PAREN:
@@ -77,8 +79,11 @@ func main() {
 		case SEMICOLON:
 			fmt.Println("SEMICOLON ; null");
 
+		case '\n':
+			line++;
+
 		default:
-			fmt.Fprintf(os.Stderr, "[Line 1] Error: Unxepected character: %s", string(char));
+			fmt.Fprintf(os.Stderr, "[Line %d] Error: Unxepected character: %s", line, string(char));
 			error = true;
 		}
 	}
