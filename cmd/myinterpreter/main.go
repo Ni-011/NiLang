@@ -14,6 +14,8 @@ const (
 	DOT rune = '.'
 	COMMA rune = ','
 	PLUS rune = '+'
+	MINUS rune = '-'
+	SEMICOLON rune = ';'
 )
 
 func main() {
@@ -66,6 +68,12 @@ func main() {
 
 		case PLUS:
 			fmt.Println("PLUS + null");
+
+		case MINUS:
+			fmt.Println("MINUS - null");
+
+		case SEMICOLON:
+			fmt.Println("SEMICOLON ; null");
 		}
 	}
 
