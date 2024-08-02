@@ -5,6 +5,11 @@ import (
 	"os"
 )
 
+const (
+	LEFT_Paren rune = '(',
+	Right_Paren rune = ')',
+)
+
 func main() {
 	// You can use print statements as follows for debugging, they'll be visible when running tests.
 	fmt.Fprintln(os.Stderr, "Logs from your program will appear here!")
@@ -27,10 +32,18 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
 		os.Exit(1)
 	}
-	
-	if len(fileContents) > 0 { // check if the file is not empty
-		panic("Scanner not implemented") 
-	} else {
-		fmt.Println("EOF  null") // Placeholder, remove this line when implementing the scanner
+
+	fileContentString := string(fileContents);	
+
+	for _, char := range fileContentString {
+		switch char {
+		case LEFT_Paren:
+			fmt.println("LEFT_PAREN ( null");
+
+		case Right_Paren:
+			fmt.println("RIGHT_PAREN ) null");
+		}
 	}
+
+	fmt.Println("EOF null");
 }
