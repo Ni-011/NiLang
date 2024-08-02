@@ -23,7 +23,6 @@ var error bool = false
 
 func main() {
 	// You can use print statements as follows for debugging, they'll be visible when running tests.
-	fmt.Fprintln(os.Stderr, "Logs from your program will appear here!")
 
 	if len(os.Args) < 3 {
 		fmt.Fprintln(os.Stderr, "Usage: ./your_program.sh tokenize <filename>")
@@ -40,6 +39,7 @@ func main() {
 	filename := os.Args[2]                     // second argument is the filename
 	fileContents, err := os.ReadFile(filename) // read the file
 	if err != nil {                            // if there was an error reading the file
+		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
 		os.Exit(1)
 	}
 
