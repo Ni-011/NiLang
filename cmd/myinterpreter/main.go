@@ -21,6 +21,7 @@ const (
 	BANG        rune = '!'
 	LESS        rune = '<'
 	GREATER     rune = '>'
+	SLASH       rune = '/'
 )
 
 var error bool = false
@@ -114,6 +115,13 @@ func main() {
 				i++
 			} else {
 				fmt.Println("GREATER > null")
+			}
+
+		case SLASH:
+			if i+1 < len(fileContentString) && fileContentString[i+1] == byte(SLASH) {
+				i++
+			} else {
+				fmt.Println("SLASH / null")
 			}
 
 		case '\n': // for new lines
