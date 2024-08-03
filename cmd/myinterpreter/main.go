@@ -48,7 +48,8 @@ func main() {
 
 	line := 1
 
-	for index, char := range fileContentString { // for each char in the file, characterise each token
+	for i := 0; i < len(fileContentString); i++ { // for each char in the file, characterise each token
+		char := rune(fileContentString[i])
 		switch char {
 		case LEFT_PAREN:
 			fmt.Println("LEFT_PAREN ( null")
@@ -81,10 +82,9 @@ func main() {
 			fmt.Println("SEMICOLON ; null")
 
 		case EQUAL:
-			if index+1 < len(fileContentString) && fileContentString[index+1] == byte(EQUAL) {
+			if i+1 < len(fileContentString) && fileContentString[i+1] == byte(EQUAL) {
 				fmt.Println("EQUAL_EQUAL == null")
-				index++
-				continue
+				i++
 			} else {
 				fmt.Println("EQUAL = null")
 			}
