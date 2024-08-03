@@ -19,6 +19,8 @@ const (
 	SEMICOLON   rune = ';'
 	EQUAL       rune = '='
 	BANG        rune = '!'
+	LESS        rune = '<'
+	GREATER     rune = '>'
 )
 
 var error bool = false
@@ -96,6 +98,22 @@ func main() {
 				i++
 			} else {
 				fmt.Println("BANG ! null")
+			}
+
+		case LESS:
+			if i+1 < len(fileContentString) && fileContentString[i+1] == byte(EQUAL) {
+				fmt.Println("LESS_EQUAL <= null")
+				i++
+			} else {
+				fmt.Println("LESS < null")
+			}
+
+		case GREATER:
+			if i+1 < len(fileContentString) && fileContentString[i+1] == byte(EQUAL) {
+				fmt.Println("GREATER_EQUAL >= null")
+				i++
+			} else {
+				fmt.Println("GREATER > null")
 			}
 
 		case '\n': // for new lines
