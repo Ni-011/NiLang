@@ -83,18 +83,18 @@ func main() {
 			line++
 
 		default:
-			error = true
 			if !unicode.IsSpace(char) { // if char is not a space
+				error = true
 				fmt.Fprintf(os.Stderr, "[line %d] Error: Unexpected character: %s\n", line, string(char))
 			}
 		}
 	}
 
-	fmt.Println("EOF  null");
+	fmt.Println("EOF  null")
 
 	if error {
-		os.Exit(65);
+		os.Exit(65)
 	} else {
-		os.Exit(0);
+		os.Exit(0)
 	}
 }
