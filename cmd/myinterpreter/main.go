@@ -119,7 +119,7 @@ func main() {
 
 		case SLASH:
 			if i+1 < len(fileContentString) && fileContentString[i+1] == byte(SLASH) {
-				i++
+				break
 			} else {
 				fmt.Println("SLASH / null")
 			}
