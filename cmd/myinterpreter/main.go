@@ -48,7 +48,7 @@ func main() {
 
 	line := 1
 
-	for _, char := range fileContentString { // for each char in the file, characterise each token
+	for index, char := range fileContentString { // for each char in the file, characterise each token
 		switch char {
 		case LEFT_PAREN:
 			fmt.Println("LEFT_PAREN ( null")
@@ -81,7 +81,11 @@ func main() {
 			fmt.Println("SEMICOLON ; null")
 
 		case EQUAL:
-			fmt.Println("EQUAL = null")
+			if index+1 < len(fileContentString) && fileContentString[index+1] == byte(EQUAL) {
+				fmt.Println("EQUAL_EQUAL == null")
+			} else {
+				fmt.Println("EQUAL = null")
+			}
 
 		case '\n': // for new lines
 			line++
