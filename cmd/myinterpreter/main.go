@@ -52,7 +52,6 @@ func main() {
 
 	line := 1
 
-	outerloop:
 	for i := 0; i < len(fileContentString); i++ { // for each char in the file, characterise each token
 		char := rune(fileContentString[i])
 		switch char {
@@ -119,8 +118,16 @@ func main() {
 			}
 
 		case SLASH:
-			if i+1 < len(fileContentString) && fileContentString[i+1] == byte(SLASH) {
-				break outerloop
+			if i+1 < len(fileContentString) && fileContentString[i+1] == byte(SLASH) { // if 2 consecutive slashes, it is comment
+				newLineIndex := 0; // index of the next first new line
+				for j := i; j < len(fileContentString); j++ { // find the index of the next new line
+					if fileContentString[j] == '\n' {
+						newLineIndex = j
+					}
+				}
+
+				indicesToSkip := newLineIndex - i // skip scan for chars after a comment till the next new line
+				i += indicesToSkip
 			} else {
 				fmt.Println("SLASH / null")
 			}
