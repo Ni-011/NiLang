@@ -52,6 +52,7 @@ func main() {
 
 	line := 1
 
+	outerloop:
 	for i := 0; i < len(fileContentString); i++ { // for each char in the file, characterise each token
 		char := rune(fileContentString[i])
 		switch char {
@@ -119,7 +120,7 @@ func main() {
 
 		case SLASH:
 			if i+1 < len(fileContentString) && fileContentString[i+1] == byte(SLASH) {
-				i++
+				break outerloop
 			} else {
 				fmt.Println("SLASH / null")
 			}
