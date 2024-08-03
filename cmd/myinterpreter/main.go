@@ -83,6 +83,7 @@ func main() {
 		case EQUAL:
 			if index+1 < len(fileContentString) && fileContentString[index+1] == byte(EQUAL) {
 				fmt.Println("EQUAL_EQUAL == null")
+				index++
 			} else {
 				fmt.Println("EQUAL = null")
 			}
