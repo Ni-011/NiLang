@@ -17,6 +17,7 @@ const (
 	PLUS        rune = '+'
 	MINUS       rune = '-'
 	SEMICOLON   rune = ';'
+	EQUAL       rune = '='
 )
 
 var error bool = false
@@ -78,6 +79,9 @@ func main() {
 
 		case SEMICOLON:
 			fmt.Println("SEMICOLON ; null")
+
+		case EQUAL:
+			fmt.Println("EQUAL = null")
 
 		case '\n': // for new lines
 			line++
