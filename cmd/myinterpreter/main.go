@@ -18,6 +18,7 @@ const (
 	MINUS       rune = '-'
 	SEMICOLON   rune = ';'
 	EQUAL       rune = '='
+	BANG        rune = '!'
 )
 
 var error bool = false
@@ -87,6 +88,14 @@ func main() {
 				i++
 			} else {
 				fmt.Println("EQUAL = null")
+			}
+
+		case BANG:
+			if i+1 < len(fileContentString) && fileContentString[i+1] == byte(EQUAL) {
+				fmt.Println("BANG_EQUAL != null")
+				i++
+			} else {
+				fmt.Println("BANG ! null")
 			}
 
 		case '\n': // for new lines
