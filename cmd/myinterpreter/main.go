@@ -22,6 +22,7 @@ const (
 	LESS        rune = '<'
 	GREATER     rune = '>'
 	SLASH       rune = '/'
+	STRING      rune = '"'
 )
 
 var error bool = false
@@ -126,6 +127,16 @@ func main() {
 			} else {
 				fmt.Println("SLASH / null")
 			}
+
+		case STRING:
+			i++
+			String := ""
+			for i < len(fileContentString) && fileContentString[i] != byte(STRING) { // till it hits the next "
+				String += string(fileContentString[i]) // add all characters to the string
+				i++;
+			}
+
+			fmt.Println("STRING", String, "null")
 
 		case '\n': // for new lines
 			line++
