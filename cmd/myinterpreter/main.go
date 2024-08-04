@@ -22,6 +22,7 @@ const (
 	LESS        rune = '<'
 	GREATER     rune = '>'
 	SLASH       rune = '/'
+	STRING      rune = '"'
 )
 
 var error bool = false
@@ -125,6 +126,26 @@ func main() {
 				line++
 			} else {
 				fmt.Println("SLASH / null")
+			}
+
+		case STRING:
+			i++
+			String := ""
+			var stringOpen bool                                                      // to check if the string is closed
+			for i < len(fileContentString) && fileContentString[i] != byte(STRING) { // till it hits the next "
+				stringOpen = true
+				String += string(fileContentString[i])      // add all characters to the string
+				if i+1 < len(fileContentString) && fileContentString[i+1] == byte(STRING) { // if a second " is found, string is closed
+					stringOpen = false
+				}
+				i++
+			}
+
+			if !stringOpen {
+				fmt.Println("STRING \""+String+"\"", String)
+			} else {
+				error = true
+				fmt.Fprintf(os.Stderr, "[line %d] Error: Unterminated string.", line)
 			}
 
 		case '\n': // for new lines
