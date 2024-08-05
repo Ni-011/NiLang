@@ -54,7 +54,7 @@ func main() {
 	line := 1
 
 	for i := 0; i < len(fileContentString); i++ { // for each char in the file, characterise each token
-		char := rune(fileContentString[i])
+		char := rune(fileContentString[i]) // all characters are rune
 		switch char {
 		case LEFT_PAREN:
 			fmt.Println("LEFT_PAREN ( null")
@@ -134,7 +134,7 @@ func main() {
 			var stringOpen bool                                                      // to check if the string is closed
 			for i < len(fileContentString) && fileContentString[i] != byte(STRING) { // till it hits the next "
 				stringOpen = true
-				String += string(fileContentString[i])      // add all characters to the string
+				String += string(fileContentString[i])                                      // add all characters to the string
 				if i+1 < len(fileContentString) && fileContentString[i+1] == byte(STRING) { // if a second " is found, string is closed
 					stringOpen = false
 				}
@@ -152,9 +152,22 @@ func main() {
 			line++
 
 		default:
-			if !unicode.IsSpace(char) { // if char is not a space
-				error = true
-				fmt.Fprintf(os.Stderr, "[line %d] Error: Unexpected character: %s\n", line, string(char))
+			if isDigit(char) { // if char is a digit
+				for isDigit(char) { // till it hits a non-digit move ahead
+					i++
+				}
+
+				if (char == '.') { // if char is a dot, skip it
+					i++
+					for isDigit(char) { // till it hits a non-digit move ahead
+						i++
+					}
+				}
+			} else {
+				if !unicode.IsSpace(char) { // if char is not a space
+					error = true
+					fmt.Fprintf(os.Stderr, "[line %d] Error: Unexpected character: %s\n", line, string(char))
+				}
 			}
 		}
 	}
@@ -166,4 +179,8 @@ func main() {
 	} else {
 		os.Exit(0)
 	}
+}
+
+func isDigit(char rune) bool {
+	return char >= '0' && char <= '9'
 }
