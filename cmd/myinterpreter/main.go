@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 	"unicode"
 )
 
@@ -54,7 +56,7 @@ func main() {
 	line := 1
 
 	for i := 0; i < len(fileContentString); i++ { // for each char in the file, characterise each token
-		char := rune(fileContentString[i])
+		char := rune(fileContentString[i]) // all characters are rune
 		switch char {
 		case LEFT_PAREN:
 			fmt.Println("LEFT_PAREN ( null")
@@ -134,7 +136,7 @@ func main() {
 			var stringOpen bool                                                      // to check if the string is closed
 			for i < len(fileContentString) && fileContentString[i] != byte(STRING) { // till it hits the next "
 				stringOpen = true
-				String += string(fileContentString[i])      // add all characters to the string
+				String += string(fileContentString[i])                                      // add all characters to the string
 				if i+1 < len(fileContentString) && fileContentString[i+1] == byte(STRING) { // if a second " is found, string is closed
 					stringOpen = false
 				}
@@ -152,9 +154,68 @@ func main() {
 			line++
 
 		default:
-			if !unicode.IsSpace(char) { // if char is not a space
-				error = true
-				fmt.Fprintf(os.Stderr, "[line %d] Error: Unexpected character: %s\n", line, string(char))
+			if isDigit(char) {
+				output := ""
+				for i < len(fileContentString) && isDigit(rune(fileContentString[i])) {
+					output += string(fileContentString[i])
+					i++
+				}
+
+				if i < len(fileContentString) && fileContentString[i] == '.' {
+					if i+1 < len(fileContentString) && isDigit(rune(fileContentString[i+1])) {
+						output += string(fileContentString[i])
+						i++
+						for i < len(fileContentString) && isDigit(rune(fileContentString[i])) {
+							output += string(fileContentString[i])
+							i++
+						}
+					} else {
+						outputFloat, err := strconv.ParseFloat(output, 64)
+
+						if err != nil {
+							error = true
+							fmt.Fprintf(os.Stderr, "[line %d] Error: Invalid number: %s\n", line, output)
+							return
+						} else {
+							formatedOutput := fmt.Sprintf("%.6f", outputFloat)
+							formatedOutput = strings.TrimRight(formatedOutput, "0")
+
+							if formatedOutput[len(formatedOutput)-1] == '.' {
+								formatedOutput += "0"
+							}
+							fmt.Println("NUMBER", output, formatedOutput)
+						}
+						fmt.Println("DOT . null")
+						i++
+						continue
+					}
+				}
+
+				outputFloat, err := strconv.ParseFloat(output, 64)
+
+				if err != nil {
+					error = true
+					fmt.Fprintf(os.Stderr, "[line %d] Error: Invalid number: %s\n", line, output)
+					return
+				} else {
+					formatedOutput := fmt.Sprintf("%.6f", outputFloat)
+					formatedOutput = strings.TrimRight(formatedOutput, "0")
+
+					if formatedOutput[len(formatedOutput)-1] == '.' {
+						formatedOutput += "0"
+					}
+					fmt.Println("NUMBER", output, formatedOutput)
+				}
+
+			} else if char == '.' {
+				fmt.Println("DOT . null")
+				i++
+			} else {
+				if !unicode.IsSpace(char) {
+					error = true
+					fmt.Fprintf(os.Stderr, "[line %d] Error: Unexpected character: %s\n", line, string(char))
+				}
+				i++
 			}
 		}
 	}
@@ -166,4 +227,8 @@ func main() {
 	} else {
 		os.Exit(0)
 	}
+}
+
+func isDigit(char rune) bool {
+	return char >= '0' && char <= '9'
 }
