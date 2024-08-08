@@ -144,7 +144,9 @@ func main() {
 			}
 
 			if !stringOpen {
+				i++
 				fmt.Println("STRING \""+String+"\"", String)
+				continue
 			} else {
 				error = true
 				fmt.Fprintf(os.Stderr, "[line %d] Error: Unterminated string.", line)
@@ -192,15 +194,19 @@ func main() {
 					fmt.Println("DOT . null")
 				}
 
+				continue
+
 			} else if char == '.' {
 				fmt.Println("DOT . null")
 				i++
+				continue
 			} else {
 				if !unicode.IsSpace(char) {
 					error = true
 					fmt.Fprintf(os.Stderr, "[line %d] Error: Unexpected character: %s\n", line, string(char))
 				}
 				i++
+				continue
 			}
 		}
 	}
