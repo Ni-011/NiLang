@@ -91,9 +91,10 @@ func main() {
 		case EQUAL:
 			if i+1 < len(fileContentString) && fileContentString[i+1] == byte(EQUAL) {
 				fmt.Println("EQUAL_EQUAL == null")
-				i++
+				i += 2
 			} else {
 				fmt.Println("EQUAL = null")
+				i++;
 			}
 
 		case BANG:
@@ -131,20 +132,23 @@ func main() {
 			}
 
 		case STRING:
+			stringOpen := true
 			i++
 			String := ""
-			var stringOpen bool                                                      // to check if the string is closed
 			for i < len(fileContentString) && fileContentString[i] != byte(STRING) { // till it hits the next "
-				stringOpen = true
 				String += string(fileContentString[i])                                      // add all characters to the string
-				if i+1 < len(fileContentString) && fileContentString[i+1] == byte(STRING) { // if a second " is found, string is closed
-					stringOpen = false
-				}
 				i++
+			}
+
+			if fileContentString[i] == byte(STRING) { // if a second " is found, string is closed
+					stringOpen = false
 			}
 
 			if !stringOpen {
 				fmt.Println("STRING \""+String+"\"", String)
+				stringOpen = false
+				i++
+				continue
 			} else {
 				error = true
 				fmt.Fprintf(os.Stderr, "[line %d] Error: Unterminated string.", line)
@@ -177,7 +181,7 @@ func main() {
 				if err != nil {
 					error = true
 					fmt.Fprintf(os.Stderr, "[line %d] Error: Invalid number: %s\n", line, output)
-					return
+					continue
 				} else {
 					formatedOutput := fmt.Sprintf("%.6f", outputFloat)
 					formatedOutput = strings.TrimRight(formatedOutput, "0")
@@ -192,9 +196,12 @@ func main() {
 					fmt.Println("DOT . null")
 				}
 
+				continue
+
 			} else if char == '.' {
 				fmt.Println("DOT . null")
 				i++
+				continue
 			} else {
 				if !unicode.IsSpace(char) {
 					error = true
