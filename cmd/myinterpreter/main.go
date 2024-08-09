@@ -207,7 +207,6 @@ func main() {
 					error = true
 					fmt.Fprintf(os.Stderr, "[line %d] Error: Unexpected character: %s\n", line, string(char))
 				}
-				i++
 			}
 		}
 	}
