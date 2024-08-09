@@ -160,15 +160,16 @@ func main() {
 		default:
 			if isDigit(char) {
 				output := ""
-				for i < len(fileContentString) && isDigit(rune(fileContentString[i])) {
+				for i+1 < len(fileContentString) && isDigit(rune(fileContentString[i+1])) { // if the next char is digit, add and move ahead
 					output += string(fileContentString[i])
 					i++
 				}
 
-				if i < len(fileContentString) && fileContentString[i] == '.' {
-					if i+1 < len(fileContentString) && isDigit(rune(fileContentString[i+1])) {
-						output += string(fileContentString[i])
-						i++
+				if i+1 < len(fileContentString) && fileContentString[i+1] == '.' { // if char next to the current digit is dot
+						output += string(fileContentString[i]) // add the current digit
+					if i+2 < len(fileContentString) && isDigit(rune(fileContentString[i+2])) { // if numbe rnext to dot a digit
+						output += string(fileContentString[i+1]) // add the dot
+						i += 2 // move to the digit next to dot
 						for i < len(fileContentString) && isDigit(rune(fileContentString[i])) {
 							output += string(fileContentString[i])
 							i++
@@ -196,18 +197,14 @@ func main() {
 					fmt.Println("DOT . null")
 				}
 
-				continue
-
 			} else if char == '.' {
 				fmt.Println("DOT . null")
 				i++
-				continue
 			} else {
 				if !unicode.IsSpace(char) {
 					error = true
 					fmt.Fprintf(os.Stderr, "[line %d] Error: Unexpected character: %s\n", line, string(char))
 				}
-				i++
 			}
 		}
 	}
