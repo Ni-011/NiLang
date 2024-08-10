@@ -198,6 +198,13 @@ func main() {
 			} else if char == '.' {
 				fmt.Println("DOT . null")
 				i++
+			} else if isAlphabet(char) { // if the char is alphabet
+				identifier := ""
+				for i < len(fileContentString) && isAlphaNumeric(rune(fileContentString[i])) { // if current char is alphanumeric
+					identifier += string(fileContentString[i])
+					i++
+				}
+				fmt.Println("IDENTIFIER", identifier, "null")
 			} else {
 				if !unicode.IsSpace(char) {
 					error = true
@@ -218,4 +225,12 @@ func main() {
 
 func isDigit(char rune) bool {
 	return char >= '0' && char <= '9'
+}
+
+func isAlphabet(char rune) bool {
+	return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || char == '_'
+}
+
+func isAlphaNumeric (char rune) bool {
+	return isAlphabet(char) || isDigit(char)
 }
