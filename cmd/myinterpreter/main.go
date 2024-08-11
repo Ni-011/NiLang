@@ -27,6 +27,10 @@ const (
 	STRING      rune = '"'
 )
 
+var Keywords []string = []string{
+	"and", "class", "else", "false", "for", "fun", "if", "nil", "or", "print", "return", "super", "this", "true", "var", "while",
+}
+
 var error bool = false
 
 func main() {
@@ -219,7 +223,15 @@ func main() {
 						break
 					}
 				}
-				fmt.Println("IDENTIFIER", identifier, "null")
+
+				for _, keyword := range Keywords {
+					if keyword == identifier {
+						fmt.Println(strings.ToUpper(keyword), identifier, "null")
+						continue
+					} else {
+						fmt.Println("IDENTIFIER", identifier, "null")
+					}
+				}
 			} else {
 				if !unicode.IsSpace(char) {
 					error = true
