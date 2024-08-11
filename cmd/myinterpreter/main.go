@@ -27,6 +27,10 @@ const (
 	STRING      rune = '"'
 )
 
+var Keywords []string = []string{
+	"and", "class", "else", "false", "for", "fun", "if", "nil", "or", "print", "return", "super", "this", "true", "var", "while",
+}
+
 var error bool = false
 
 func main() {
@@ -55,6 +59,7 @@ func main() {
 
 	line := 1
 
+	scannerLoop:
 	for i := 0; i < len(fileContentString); i++ { // for each char in the file, characterise each token
 		char := rune(fileContentString[i]) // all characters are rune
 		switch char {
@@ -219,6 +224,14 @@ func main() {
 						break
 					}
 				}
+
+				for _, keyword := range Keywords {
+					if keyword == identifier {
+						fmt.Println(strings.ToUpper(keyword), identifier, "null")
+						continue scannerLoop
+					} 
+				}
+
 				fmt.Println("IDENTIFIER", identifier, "null")
 			} else {
 				if !unicode.IsSpace(char) {
