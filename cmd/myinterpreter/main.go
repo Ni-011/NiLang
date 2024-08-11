@@ -135,9 +135,12 @@ func main() {
 			i++
 			String := ""
 			for i < len(fileContentString) { // till the end of the string
-				if fileContentString[i] ==  byte(STRING) { // if " is found, close string
+				if fileContentString[i] == byte(STRING) && fileContentString[i] != '\n' { // if " is found, close string
 					stringOpen = false
 					break
+				}
+				if fileContentString[i] == '\n' {
+					line++
 				}
 				String += string(fileContentString[i]) // add all characters to the string
 				i++
@@ -162,15 +165,15 @@ func main() {
 				}
 
 				if i+1 < len(fileContentString) && fileContentString[i+1] == '.' { // if char next to the current digit is dot
-						output += string(fileContentString[i]) // add the current digit
+					output += string(fileContentString[i])                                     // add the current digit
 					if i+2 < len(fileContentString) && isDigit(rune(fileContentString[i+2])) { // if numbe rnext to dot a digit
 						output += string(fileContentString[i+1]) // add the dot
-						i += 2 // move to the digit next to dot
+						i += 2                                   // move to the digit next to dot
 						for i < len(fileContentString) && isDigit(rune(fileContentString[i])) {
 							output += string(fileContentString[i])
 							i++
 						}
-					} 
+					}
 				} else if i < len(fileContentString) && isDigit(rune(fileContentString[i])) { // if the current digit is not followed by dot
 					output += string(fileContentString[i]) // add the current digit
 				}
@@ -189,7 +192,7 @@ func main() {
 						formatedOutput += "0"
 					}
 					fmt.Println("NUMBER", output, formatedOutput)
-				} 
+				}
 
 				if i < len(fileContentString) && fileContentString[i] == '.' {
 					fmt.Println("DOT . null")
@@ -231,6 +234,6 @@ func isAlphabet(char rune) bool {
 	return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || char == '_'
 }
 
-func isAlphaNumeric (char rune) bool {
+func isAlphaNumeric(char rune) bool {
 	return isAlphabet(char) || isDigit(char)
 }
