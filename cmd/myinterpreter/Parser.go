@@ -104,6 +104,9 @@ func (p *Parser) parseExpression() (ASTNode, error) {
 		}
 		return &LiteralNode{value: value}, nil
 
+	case STRING:
+		return &LiteralNode{value: token.Lexeme[1:len(token.Lexeme)-1]}, nil
+
 	default:
 		return nil, fmt.Errorf("unexpected token: %v", token.Type)
 	}
