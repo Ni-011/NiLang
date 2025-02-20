@@ -28,9 +28,17 @@ func main() {
 		scanner := NewLexer(string(fileContents))
 		tokens := scanner.Scan()
 
-		// for all tokens print type, lexeme, literal exit 0
+		// for all tokens print type, lexeme, literal
 		for _, token := range tokens {
-			fmt.Fprintf(os.Stdout, "%s %s %v\n", token.Type, token.Lexeme, token.Literal)
+			// Convert <nil> to null when printing
+			var literalStr string
+			if token.Literal == nil {
+				literalStr = "null"
+			} else {
+				literalStr = fmt.Sprintf("%v", token.Literal)
+			}
+			
+			fmt.Fprintf(os.Stdout, "%s %s %s\n", token.Type, token.Lexeme, literalStr)
 		}
 	} else if command == "parse" {
 		filename := os.Args[2]
