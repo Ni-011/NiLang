@@ -68,6 +68,7 @@ type Lexer struct {
 	Start   int
 	Current int
 	Line    int
+	hadError bool
 }
 
 // keywords mapped to their token type
@@ -98,6 +99,7 @@ func NewLexer(_source string) *Lexer {
 		Start:   0,
 		Current: 0,
 		Line:    1,
+		hadError: false,
 	}
 }
 
@@ -108,12 +110,15 @@ func (L *Lexer) Scan() []Token {
 		L.ScanToken()
 	}
 
-	L.Tokens = append(L.Tokens, Token{ // adding EOF token at end
-		Type:    EOF,
-		Lexeme:  "",
-		Literal: nil,
-		Line:    L.Line,
-	})
+	// Add EOF at the end
+	if len(L.Tokens) == 0 || L.Tokens[len(L.Tokens)-1].Type != EOF {
+		L.Tokens = append(L.Tokens, Token{
+			Type:    EOF,
+			Lexeme:  "",
+			Literal: nil,
+			Line:    L.Line,
+		})
+	}
 
 	return L.Tokens
 }
@@ -137,7 +142,7 @@ func (L *Lexer) ScanToken() {
 		L.addToken(RIGHT_BRACE)
 
 	case ',':
-		L.addToken(SEMICOLON)
+		L.addToken(COMMA)
 
 	case '*':
 		L.addToken(STAR)
@@ -213,6 +218,7 @@ func (L *Lexer) ScanToken() {
 
 func (L *Lexer) error(Line int, char byte) {
 	fmt.Fprintf(os.Stderr, "[line %d] Error: Unexpected character: %c\n", Line, char)
+	L.hadError = true  // Set error flag for exit code 65
 }
 
 func isDigit(char byte) bool {
@@ -281,22 +287,29 @@ func (L *Lexer) addTokenLiteral(_token TokenType, _Literal interface{}) { // add
 }
 
 func (L *Lexer) string() {
-	for L.peek() != '"' && !L.atEnd() { // while not end of string move ahead
-		if L.peek() == '\n' { // new line if multi line string
+	for L.peek() != '"' && !L.atEnd() {
+		if L.peek() == '\n' {
 			L.Line++
 		}
-
 		L.advance()
 	}
 
-	if L.atEnd() { // if end without closing ", error
+	if L.atEnd() {
 		fmt.Fprintf(os.Stderr, "[line %d] Error: Unterminated string.\n", L.Line)
+		L.hadError = true
+		// Don't clear previous tokens, just add EOF
+		L.Tokens = append(L.Tokens, Token{
+			Type:    EOF,
+			Lexeme:  "",
+			Literal: nil,
+			Line:    L.Line,
+		})
+		return
 	}
 
-	L.advance() // move over to the ending "
-
-	stringValue := L.Source[L.Start+1 : L.Current-1] //get the string excluding quotes
-	L.addTokenLiteral(STRING, stringValue)
+	L.advance()
+	value := L.Source[L.Start+1 : L.Current-1]
+	L.addTokenLiteral(STRING, value)
 }
 
 func (L *Lexer) identifier() {
@@ -337,4 +350,20 @@ func (L *Lexer) number() {
 	}
 
 	L.addTokenLiteral(NUMBER, numberLiteral)
+}
+
+// Add this method to format token literals consistently
+func (t Token) LiteralString() string {
+	if t.Literal == nil {
+		return "null"
+	}
+	if num, ok := t.Literal.(float64); ok {
+		// If it's a whole number, format with .0
+		if num == float64(int64(num)) {
+			return fmt.Sprintf("%.1f", num)
+		}
+		// For decimals, preserve exact value
+		return fmt.Sprintf("%g", num)
+	}
+	return fmt.Sprintf("%v", t.Literal)
 }

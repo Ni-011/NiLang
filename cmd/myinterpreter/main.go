@@ -20,7 +20,7 @@ func main() {
 		filename := os.Args[2]
 		fileContents, err := os.ReadFile(filename)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error readint file: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
 			os.Exit(1)
 		}
 
@@ -28,17 +28,14 @@ func main() {
 		scanner := NewLexer(string(fileContents))
 		tokens := scanner.Scan()
 
-		// for all tokens print type, lexeme, literal
+		// Print all tokens first
 		for _, token := range tokens {
-			// Convert <nil> to null when printing
-			var literalStr string
-			if token.Literal == nil {
-				literalStr = "null"
-			} else {
-				literalStr = fmt.Sprintf("%v", token.Literal)
-			}
-			
-			fmt.Fprintf(os.Stdout, "%s %s %s\n", token.Type, token.Lexeme, literalStr)
+			fmt.Fprintf(os.Stdout, "%s %s %s\n", token.Type, token.Lexeme, token.LiteralString())
+		}
+
+		// Then check for errors and exit if needed
+		if scanner.hadError {
+			os.Exit(65)
 		}
 	} else if command == "parse" {
 		filename := os.Args[2]
