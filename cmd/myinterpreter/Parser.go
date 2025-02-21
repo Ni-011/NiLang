@@ -54,6 +54,14 @@ func (L *LiteralNode) String() string {
 	return L.value
 }
 
+type GroupNode struct {
+	expression ASTNode
+}
+
+func (g *GroupNode) String() string {
+	return fmt.Sprintf("(group %s)", g.expression.String())
+}
+
 func (p *Parser) parseExpression() (ASTNode, error) {
 	if p.current >= len(p.tokens) {
 		return nil, fmt.Errorf("unexpected end of input")
@@ -106,6 +114,21 @@ func (p *Parser) parseExpression() (ASTNode, error) {
 
 	case STRING:
 		return &LiteralNode{value: token.Lexeme[1:len(token.Lexeme)-1]}, nil
+
+	case LEFT_PAREN:
+		// parse the next expr
+		expr, err := p.parseExpression();
+		if err != nil {
+			return nil, err
+		}
+
+		// check if the ) exists
+		if p.current >= len(p.tokens) || p.tokens[p.current].Type != RIGHT_PAREN {
+			return nil, fmt.Errorf("expected ')' got none")
+		}
+		p.current++ // consume the ')'
+
+		return &GroupNode{expression: expr}, nil;
 
 	default:
 		return nil, fmt.Errorf("unexpected token: %v", token.Type)
