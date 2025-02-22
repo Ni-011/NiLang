@@ -62,6 +62,15 @@ func (g *GroupNode) String() string {
 	return fmt.Sprintf("(group %s)", g.expression.String())
 }
 
+type UnaryNode struct {
+	operator string
+	expr ASTNode
+}
+
+func (u *UnaryNode) String() string {
+	return fmt.Sprintf("(%s %s)", u.operator, u.expr)
+}
+
 func (p *Parser) parseExpression() (ASTNode, error) {
 	if p.current >= len(p.tokens) {
 		return nil, fmt.Errorf("unexpected end of input")
@@ -129,6 +138,14 @@ func (p *Parser) parseExpression() (ASTNode, error) {
 		p.current++ // consume the ')'
 
 		return &GroupNode{expression: expr}, nil;
+
+	case BANG, MINUS:
+		operator := token.Lexeme
+		expr, err := p.parseExpression()
+		if err != nil {
+			return nil, err
+		}
+		return &UnaryNode{operator: operator, expr: expr}, nil
 
 	default:
 		return nil, fmt.Errorf("unexpected token: %v", token.Type)
