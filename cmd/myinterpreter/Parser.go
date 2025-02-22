@@ -71,7 +71,65 @@ func (u *UnaryNode) String() string {
 	return fmt.Sprintf("(%s %s)", u.operator, u.expr)
 }
 
+type BinaryNode struct {
+	left ASTNode
+	operator string
+	right ASTNode
+}
+
+func (b *BinaryNode) String() string {
+	return fmt.Sprintf("(%s %s %s)", b.operator, b.left, b.right)
+}
+
+// main parse function
 func (p *Parser) parseExpression() (ASTNode, error) {
+	expr, err := p.parseBinary()
+	if (err != nil) {
+		return nil, fmt.Errorf("failed to parse expression: %v", err)
+	}
+
+	return expr, nil
+}
+
+func (p *Parser) parseBinary() (ASTNode, error) {
+	// parse left side
+	left, err := p.parsePrimary()
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse the left term: %v", err)
+	}
+
+	// check for the operator
+	for p.current < len(p.tokens) {
+		operator := p.tokens[p.current]
+
+		// if invalid operator, break
+		if operator.Type != STAR && operator.Type != SLASH && operator.Type != MINUS {
+			break
+		}
+
+		// if valid operator
+		p.current++
+
+		// parse the right term
+		right, err := p.parsePrimary()
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse the right term: %v", err)
+		}
+
+		// Update left with the new binary expression
+		expr := &BinaryNode{
+			left:     left,
+			operator: operator.Lexeme,
+			right:    right,
+		}
+
+		left = expr;
+	}
+	return left, nil
+}
+
+// parses primary expressions, no logical operations
+func (p *Parser) parsePrimary() (ASTNode, error) {
 	if p.current >= len(p.tokens) {
 		return nil, fmt.Errorf("unexpected end of input")
 	}
@@ -141,7 +199,7 @@ func (p *Parser) parseExpression() (ASTNode, error) {
 
 	case BANG, MINUS:
 		operator := token.Lexeme
-		expr, err := p.parseExpression()
+		expr, err := p.parsePrimary()
 		if err != nil {
 			return nil, err
 		}
