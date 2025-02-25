@@ -47,8 +47,8 @@ func main() {
 
 		ast, err := Parse(string(fileContents))
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error parsing file: %v\n", err)
-			os.Exit(1)
+			fmt.Fprintf(os.Stderr, "%v\n", err)
+			os.Exit(65)
 		}
 		fmt.Println(ast.Root.String())
 	} else {

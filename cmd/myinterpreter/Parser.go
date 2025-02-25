@@ -93,6 +93,18 @@ func (b *BinaryNode) String() string {
 	return fmt.Sprintf("(%s %s %s)", b.operator, b.left, b.right)
 }
 
+// error handling
+type ParseError struct {
+	line int
+	lexeme string
+	message string
+}
+
+// error format
+func (e *ParseError) Error() string {
+	return fmt.Sprintf("[Line %d] Error at '%s': %s", e.line, e.lexeme, e.message);
+}
+
 // main parse function
 func (p *Parser) parseExpression() (ASTNode, error) {
 	left, err := p.parseBinary()
@@ -165,7 +177,11 @@ func (p *Parser) parseBinary() (ASTNode, error) {
 // parses primary expressions, no logical operations
 func (p *Parser) parsePrimary() (ASTNode, error) {
 	if p.current >= len(p.tokens) {
-		return nil, fmt.Errorf("unexpected end of input")
+		return nil, &ParseError{
+			line: p.tokens[p.current-1].Line,
+			lexeme: p.tokens[p.current-1].Lexeme,
+			message: "Expect Expression.",
+		}
 	}
 
 	token := p.tokens[p.current] // get the current token
@@ -225,7 +241,11 @@ func (p *Parser) parsePrimary() (ASTNode, error) {
 
 		// check if the ) exists
 		if p.current >= len(p.tokens) || p.tokens[p.current].Type != RIGHT_PAREN {
-			return nil, fmt.Errorf("expected ')' got none")
+			return nil, &ParseError{
+				line: p.tokens[p.current-1].Line,
+				lexeme: p.tokens[p.current-1].Lexeme,
+				message: "Expect expression.",
+			}
 		}
 		p.current++ // consume the ')'
 
