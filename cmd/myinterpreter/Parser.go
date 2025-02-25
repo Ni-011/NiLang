@@ -83,12 +83,34 @@ func (b *BinaryNode) String() string {
 
 // main parse function
 func (p *Parser) parseExpression() (ASTNode, error) {
-	expr, err := p.parseBinary()
+	left, err := p.parseBinary()
 	if (err != nil) {
 		return nil, fmt.Errorf("failed to parse expression: %v", err)
 	}
 
-	return expr, nil
+	// check for + - operators
+	for p.current < len(p.tokens) {
+		operator := p.tokens[p.current];
+
+		if operator.Type != PLUS && operator.Type != MINUS {
+			break;
+		}
+		// consume the operator, move to right
+		p.current++;
+
+		right, err := p.parseBinary();
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse the right term: %v", err)
+		}
+
+		left = &BinaryNode{
+			left: left,
+			operator: operator.Lexeme,
+			right: right,
+		}
+	}
+
+	return left, nil
 }
 
 func (p *Parser) parseBinary() (ASTNode, error) {
@@ -103,7 +125,7 @@ func (p *Parser) parseBinary() (ASTNode, error) {
 		operator := p.tokens[p.current]
 
 		// if invalid operator, break
-		if operator.Type != STAR && operator.Type != SLASH && operator.Type != MINUS {
+		if operator.Type != STAR && operator.Type != SLASH {
 			break
 		}
 
