@@ -14,6 +14,8 @@ var BinaryOperators = map[TokenType]bool {
 	GREATER_EQUAL: true,
 	LESS:          true,
 	GREATER:       true,
+	EQUAL_EQUAL:   true,
+	BANG_EQUAL:     true,
 }
 
 func Parse(source string) (*AST, error) {
@@ -135,7 +137,7 @@ func (p *Parser) parseBinary() (ASTNode, error) {
 		operator := p.tokens[p.current]
 
 		// if invalid operator, break
-		if BinaryOperators[operator.Type] == false {
+		if !BinaryOperators[operator.Type] {
 			break
 		}
 
