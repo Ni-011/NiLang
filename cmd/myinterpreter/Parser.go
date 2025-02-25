@@ -6,6 +6,16 @@ import (
 	"strings"
 )
 
+// Binary operators
+var BinaryOperators = map[TokenType]bool {
+	STAR:          true,
+	SLASH:         true,
+	LESS_EQUAL:    true,
+	GREATER_EQUAL: true,
+	LESS:          true,
+	GREATER:       true,
+}
+
 func Parse(source string) (*AST, error) {
 	// Lexical analysis
 	lexer := NewLexer(string(source))
@@ -125,7 +135,7 @@ func (p *Parser) parseBinary() (ASTNode, error) {
 		operator := p.tokens[p.current]
 
 		// if invalid operator, break
-		if operator.Type != STAR && operator.Type != SLASH {
+		if BinaryOperators[operator.Type] == false {
 			break
 		}
 
