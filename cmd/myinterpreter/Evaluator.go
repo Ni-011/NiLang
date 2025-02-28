@@ -1,6 +1,6 @@
 package main
 
-import "fmt"
+import "strconv"
 
 func Evaluate (source string) (interface{}, error) {
 	ast, err := Parse(source);
@@ -12,9 +12,9 @@ func Evaluate (source string) (interface{}, error) {
 }
 
 func EvaluateAST(node ASTNode) (interface{}, error) {
-	n := node.String();
+	nodeStr := node.String();
 	
-	switch n {
+	switch nodeStr {
 		case "nil":
 			return nil, nil;
 		case "true":
@@ -23,6 +23,11 @@ func EvaluateAST(node ASTNode) (interface{}, error) {
 			return false, nil;
 		
 		default:
-			return nil, fmt.Errorf("unknown node: %s", n);
+			num, err := strconv.ParseFloat(nodeStr, 64);
+			if err == nil {
+				return num, nil;
+			}
+
+			return nodeStr, nil;
 	}
 }
