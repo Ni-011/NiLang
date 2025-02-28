@@ -51,6 +51,24 @@ func main() {
 			os.Exit(65)
 		}
 		fmt.Println(ast.Root.String())
+	} else if command == "evaluate" {
+		filename := os.Args[2];
+		fileContents, err := os.ReadFile(filename);
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
+			os.Exit(1);
+		}
+
+		result, err := Evaluate(string(fileContents))
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error evaluating file: %v\n", err)
+		}
+
+		if result == nil {
+			fmt.Println("nil")
+		} else {
+			fmt.Println(result)
+		}
 	} else {
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", command)
 		os.Exit(1)
