@@ -13,6 +13,16 @@ func Evaluate (source string) (interface{}, error) {
 
 func EvaluateAST(node ASTNode) (interface{}, error) {
 	nodeStr := node.String();
+	// check if node is a group Node and evaluate its expression
+	groupNode, ok:= node.(*GroupNode);
+	if ok {
+		return EvaluateAST(groupNode.expression);
+	}
+
+	LiteralNode, ok := node.(*LiteralNode);
+	if ok {
+		nodeStr = LiteralNode.value;
+	}
 	
 	switch nodeStr {
 		case "nil":
