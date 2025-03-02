@@ -87,7 +87,24 @@ func EvaluateAST(node ASTNode) (interface{}, error) {
 				if ok {
 					return leftNum + rightNum, nil;
 				}
+			} 
+
+			leftStr, leftIsStr := left.(string);
+			rightStr, rightIsStr := right.(string);
+
+			// if either one is string, convert other and concatinate as strings
+			if leftIsStr || rightIsStr {
+				if !leftIsStr {
+					leftStr = fmt.Sprintf("%v", left);
+				}
+
+				if !rightIsStr {
+					rightStr = fmt.Sprintf("%v", right);
+				}
+
+				return leftStr + rightStr, nil;
 			}
+
 
 		case "-":
 			leftNum, ok := left.(float64);
