@@ -82,30 +82,24 @@ func EvaluateAST(node ASTNode) (interface{}, error) {
 			}
 		
 		case "+":
-			leftNum, ok := left.(float64);
-			if ok {
-				rightNum, ok := right.(float64);
-				if ok {
-					return leftNum + rightNum, nil;
-				}
-			} 
-
+			leftNum, leftIsNum := left.(float64);
+			rightNum, rightIsNum := right.(float64);
+			
+			// If both are numbers, add them
+			if leftIsNum && rightIsNum {
+				return leftNum + rightNum, nil;
+			}
+			
 			leftStr, leftIsStr := left.(string);
 			rightStr, rightIsStr := right.(string);
-
-			// if either one is string, convert other and concatinate as strings
-			if leftIsStr || rightIsStr {
-				if !leftIsStr {
-					leftStr = fmt.Sprintf("%v", left);
-				}
-
-				if !rightIsStr {
-					rightStr = fmt.Sprintf("%v", right);
-				}
-
+			
+			// If both are strings, concatenate them
+			if leftIsStr && rightIsStr {
 				return leftStr + rightStr, nil;
 			}
-
+			
+			// Otherwise, it's an error - can't mix types
+			return nil, fmt.Errorf("operands must be two numbers or two strings.\n[Line %v]", BinaryNode.line);
 
 		case "-":
 			leftNum, ok := left.(float64);
@@ -114,6 +108,8 @@ func EvaluateAST(node ASTNode) (interface{}, error) {
 				if ok {
 					return leftNum - rightNum, nil;
 				}
+			} else {
+				return nil, fmt.Errorf("operands must be two numbers.\n[Line %v]", BinaryNode.line);
 			}
 
 		case ">": 

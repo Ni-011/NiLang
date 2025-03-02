@@ -89,6 +89,7 @@ type BinaryNode struct {
 	left ASTNode
 	operator string
 	right ASTNode
+	line int
 }
 
 func (b *BinaryNode) String() string {
@@ -169,6 +170,7 @@ func (p *Parser) parseBinary() (ASTNode, error) {
 			left:     left,
 			operator: operator.Lexeme,
 			right:    right,
+			line: operator.Line,
 		}
 
 		left = expr;
