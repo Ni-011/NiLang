@@ -60,6 +60,7 @@ func (ast *AST) String() string {
 // literals booleans, nil etc
 type LiteralNode struct {
 	value string
+	wasString bool
 }
 
 func (L *LiteralNode) String() string {
@@ -230,7 +231,7 @@ func (p *Parser) parsePrimary() (ASTNode, error) {
 		return &LiteralNode{value: value}, nil
 
 	case STRING:
-		return &LiteralNode{value: token.Lexeme[1:len(token.Lexeme)-1]}, nil
+		return &LiteralNode{value: token.Lexeme[1:len(token.Lexeme)-1], wasString: true}, nil
 
 	case LEFT_PAREN:
 		// parse the next expr
