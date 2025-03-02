@@ -114,6 +114,49 @@ func EvaluateAST(node ASTNode) (interface{}, error) {
 					return leftNum - rightNum, nil;
 				}
 			}
+
+		case ">": 
+			if leftNum, ok := left.(float64); ok {
+				if rightNum, ok := right.(float64); ok {
+					return leftNum > rightNum, nil;
+				}
+			} else {
+				return nil, fmt.Errorf("'>' operator requires two numbers");
+			}
+
+		case ">=": 
+			if leftNum, ok := left.(float64); ok {
+				if rightNum, ok := right.(float64); ok {
+					return leftNum >= rightNum, nil;
+				}
+			} else {
+				return nil, fmt.Errorf("'>=' operator requires two numbers");
+			}
+
+		case "<": 
+			if leftNum, ok := left.(float64); ok {
+				if rightNum, ok := right.(float64); ok {
+					return leftNum < rightNum, nil;
+				}
+			} else {
+				return nil, fmt.Errorf("'<' operator requires two numbers");
+			}
+
+		case "<=": 
+			if leftNum, ok := left.(float64); ok {
+				if rightNum, ok := right.(float64); ok {
+					return leftNum <= rightNum, nil;
+				}
+			} else {
+				return nil, fmt.Errorf("'<=' operator requires two numbers");
+			}
+
+		case "==":
+			if leftNum, ok := left.(float64); ok {
+				if rightNum, ok := right.(float64); ok {
+					return leftNum == rightNum, nil;
+				}
+			}
 		}
 
 		return nil, fmt.Errorf("unknown binary operator: %s", BinaryNode.operator);
