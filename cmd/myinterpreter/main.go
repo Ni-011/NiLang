@@ -62,6 +62,7 @@ func main() {
 		result, err := Evaluate(string(fileContents))
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error evaluating file: %v\n", err)
+			os.Exit(70);
 		}
 
 		if result == nil {

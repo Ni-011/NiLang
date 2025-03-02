@@ -34,7 +34,7 @@ func EvaluateAST(node ASTNode) (interface{}, error) {
 			if ok {
 				return -num, nil;
 			}
-			return nil, fmt.Errorf("cannot apply '-' to non-number: %v", expr);
+			return nil, fmt.Errorf("operant must be number.\n[Line %v]", unaryNode.line);
 
 		case "!":
 			// check if the expression is a boolean
@@ -153,36 +153,22 @@ func EvaluateAST(node ASTNode) (interface{}, error) {
 			}
 
 		case "==":
-			// Check if one is a number and one is a string
-			leftNum, leftIsNum := left.(float64)
-			rightNum, rightIsNum := right.(float64)
-			leftStr, leftIsStr := left.(string)
-			rightStr, rightIsStr := right.(string)
-			
-			// If one is a number and one is a string, they're not equal
-			if (leftIsNum && rightIsStr) || (leftIsStr && rightIsNum) {
+			// Different types are never equal
+			if reflect.TypeOf(left) != reflect.TypeOf(right) {
 				return false, nil
 			}
 			
-			// If both are numbers, compare them
-			if leftIsNum && rightIsNum {
-				return leftNum == rightNum, nil
-			}
-			
-			// If both are strings, compare them
-			if leftIsStr && rightIsStr {
-				return leftStr == rightStr, nil
-			}
-			
-			// For other types, use direct comparison
+			// Same types can be compared directly
 			return left == right, nil
 
 		case "!=":
+			// Different types are always not equal
 			if reflect.TypeOf(left) != reflect.TypeOf(right) {
-				return true, nil;
+				return true, nil
 			}
-
-			return left != right, nil;
+			
+			// Same types can be compared directly
+			return left != right, nil
 		}
 
 		return nil, fmt.Errorf("unknown binary operator: %s", BinaryNode.operator);
@@ -236,26 +222,4 @@ func isTrue (value interface{}) bool {
 
 	// everything else is true by default
 	return true;
-}
-
-func isSameType (left, right interface{}) bool {
-	// check if number or string
-	_, leftIsNum := left.(float64)
-    _, rightIsNum := right.(float64)
-    _, leftIsStr := left.(string)
-    _, rightIsStr := right.(string)
-
-	if leftIsNum && rightIsNum {
-		return true;
-	}
-
-	if leftIsStr && rightIsStr {
-		return true;
-	}
-
-	if (leftIsNum && rightIsStr) || (leftIsStr && rightIsNum) {
-		return false;
-	}
-
-	return reflect.TypeOf(left) == reflect.TypeOf(right);
 }

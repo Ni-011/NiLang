@@ -78,6 +78,7 @@ func (g *GroupNode) String() string {
 type UnaryNode struct {
 	operator string
 	expr ASTNode
+	line int
 }
 
 func (u *UnaryNode) String() string {
@@ -258,7 +259,7 @@ func (p *Parser) parsePrimary() (ASTNode, error) {
 		if err != nil {
 			return nil, err
 		}
-		return &UnaryNode{operator: operator, expr: expr}, nil
+		return &UnaryNode{operator: operator, expr: expr, line: token.Line}, nil
 
 	default:
 		return nil, fmt.Errorf("unexpected token: %v", token.Type)
