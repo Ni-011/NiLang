@@ -44,6 +44,64 @@ func EvaluateAST(node ASTNode) (interface{}, error) {
 		}
 	}
 
+	BinaryNode, ok := node.(*BinaryNode);
+	if ok {
+		left, err := EvaluateAST(BinaryNode.left);
+		if err != nil {
+			return nil, err;
+		}
+
+		right, err := EvaluateAST(BinaryNode.right);
+		if err != nil {
+			return nil, err;
+		}
+
+		switch BinaryNode.operator {
+		case "/":
+			// check if left is number
+			leftNum, ok := left.(float64);
+			if ok {
+				rightNum, ok := right.(float64);
+				if ok {
+					if rightNum == 0 {
+						return nil, fmt.Errorf("division by 0");
+					}
+
+					return leftNum/rightNum, nil;
+				}
+			}
+
+		case "*":
+			leftNum, ok := left.(float64);
+			if ok {
+				rightNum, ok := right.(float64);
+				if ok {
+					return leftNum*rightNum, nil;
+				}
+			}
+		
+		case "+":
+			leftNum, ok := left.(float64);
+			if ok {
+				rightNum, ok := right.(float64);
+				if ok {
+					return leftNum + rightNum, nil;
+				}
+			}
+
+		case "-":
+			leftNum, ok := left.(float64);
+			if ok {
+				rightNum, ok := right.(float64);
+				if ok {
+					return leftNum - rightNum, nil;
+				}
+			}
+		}
+
+		return nil, fmt.Errorf("unknown binary operator: %s", BinaryNode.operator);
+	}
+
 	// group
 	groupNode, ok:= node.(*GroupNode);
 	if ok {
