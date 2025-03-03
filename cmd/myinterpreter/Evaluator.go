@@ -40,6 +40,9 @@ func EvaluateAST(node ASTNode) (interface{}, error) {
 			// check if the expression is a boolean
 			return !isTrue(expr), nil;
 
+		case "print":
+			return expr, nil;
+
 		default:
 			return nil, fmt.Errorf("unknown unary operator: %s", unaryNode.operator);
 		}

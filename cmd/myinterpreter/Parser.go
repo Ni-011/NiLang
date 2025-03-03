@@ -263,6 +263,14 @@ func (p *Parser) parsePrimary() (ASTNode, error) {
 		}
 		return &UnaryNode{operator: operator, expr: expr, line: token.Line}, nil
 
+	case PRINT:
+		operator := token.Lexeme;
+		expr, err := p.parsePrimary();
+		if err != nil {
+			return nil, err
+		}
+		return &UnaryNode{operator: operator, expr: expr, line: token.Line}, nil
+
 	default:
 		return nil, fmt.Errorf("unexpected token: %v", token.Type)
 	}
